@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header />
     <HeroSection />
     <HowItWorks />
     <ShowCase />
@@ -9,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+import Header from '~/components/landing/Header.vue'
 import Features from '~/components/landing/Features.vue'
 import Footer from '~/components/landing/Footer.vue'
 import HeroSection from '~/components/landing/HeroSection.vue'

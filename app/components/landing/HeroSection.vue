@@ -1,8 +1,8 @@
 <template>
   <div class="flex-grow flex flex-col items-center w-full">
-    <section class="w-full px-4 py-16 md:py-24 max-w-7xl mx-auto">
+    <section class="w-full px-4 py-16 md:py-20 max-w-7xl mx-auto">
       <div class="@container">
-        <div class="flex flex-col gap-10 md:gap-16 lg:flex-row items-center">
+        <div class="flex flex-col gap-10 md:gap-10 lg:flex-row items-center">
           <!-- Hero Text -->
           <div
             class="flex flex-col gap-6 flex-1 text-center lg:text-left items-center lg:items-start"
@@ -16,11 +16,12 @@
             <h1
               class="text-white text-4xl sm:text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight"
             >
-              Real-Time Trivia. <br />
-              <span
-                class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500"
-                >Epic Competition.</span
-              >
+              Real-Time Trivia.
+            </h1>
+            <h1
+              class="text-4xl sm:text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500"
+            >
+              Epic Competition.
             </h1>
             <h2 class="text-gray-400 text-lg md:text-xl font-normal leading-relaxed max-w-xl">
               Create games, challenge friends, and compete live on the leaderboard. The ultimate

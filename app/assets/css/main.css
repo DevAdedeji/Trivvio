@@ -5,3 +5,19 @@
 html {
   scroll-behavior: smooth;
 }
+
+body {
+  letter-spacing: 0.3px;
+}
+
+.font-display {
+  font-family:
+    Be Vietnam Pro,
+    sans-serif;
+}
+
+.font-body {
+  font-family:
+    Noto Sans,
+    sans-serif;
+}
