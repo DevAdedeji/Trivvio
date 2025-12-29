@@ -28,16 +28,17 @@
               quiz experience for everyone.
             </h2>
             <div class="flex flex-wrap gap-4 justify-center lg:justify-start w-full">
-              <button
+              <nuxt-link
                 class="flex min-w-[140px] items-center justify-center rounded-xl h-12 px-6 bg-primary hover:bg-blue-600 transition-all text-white text-base font-bold shadow-lg shadow-primary/30 hover:scale-105 active:scale-95"
+                to="/create"
               >
                 Create Game
-              </button>
-              <button
+              </nuxt-link>
+              <!-- <nuxt-link
                 class="flex min-w-[140px] items-center justify-center rounded-xl h-12 px-6 bg-surface-dark hover:bg-[#252b36] border border-border-dark transition-all text-white text-base font-bold hover:scale-105 active:scale-95"
               >
                 Join Game
-              </button>
+              </nuxt-link> -->
             </div>
             <div class="flex items-center gap-4 text-sm text-gray-500 pt-2">
               <div class="flex -space-x-2">
