@@ -1,7 +1,7 @@
 <template>
   <main class="flex h-screen items-center justify-center p-4 relative z-10">
     <div
-      class="w-full max-w-[480px] bg-[#1a2230]/60 dark:bg-[#1a2230]/60 backdrop-blur-xl border border-white/5 shadow-2xl rounded-2xl p-8 md:p-12 flex flex-col gap-10 items-center text-center"
+      class="w-full max-w-[480px] bg-[#1a2230]/60 backdrop-blur-xl border border-white/5 shadow-2xl rounded-2xl p-8 md:p-12 flex flex-col gap-10 items-center text-center"
     >
       <div class="flex flex-col items-center gap-4">
         <div

@@ -1,6 +1,6 @@
 <template>
   <main
-    class="w-full min-h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden antialiased selection:bg-primary selection:text-white"
+    class="w-full min-h-screen bg-background-dark text-white font-display overflow-x-hidden antialiased selection:bg-primary selection:text-white"
   >
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
       <div

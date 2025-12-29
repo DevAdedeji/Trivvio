@@ -21,3 +21,8 @@ body {
     Noto Sans,
     sans-serif;
 }
+
+button:disabled {
+  opacity: 50 !important;
+  cursor: not-allowed !important;
+}
