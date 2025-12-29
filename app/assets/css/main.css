@@ -26,3 +26,42 @@ button:disabled {
   opacity: 50 !important;
   cursor: not-allowed !important;
 }
+
+.glass-panel {
+  background: rgba(30, 35, 45, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.answer-card-red:focus-within {
+  border-color: #ff3355;
+  box-shadow: 0 0 0 2px rgba(255, 51, 85, 0.3);
+}
+.answer-card-blue:focus-within {
+  border-color: #45a3e5;
+  box-shadow: 0 0 0 2px rgba(69, 163, 229, 0.3);
+}
+.answer-card-yellow:focus-within {
+  border-color: #ffc00a;
+  box-shadow: 0 0 0 2px rgba(255, 192, 10, 0.3);
+}
+.answer-card-green:focus-within {
+  border-color: #66bf39;
+  box-shadow: 0 0 0 2px rgba(102, 191, 57, 0.3);
+}
+
+/* Custom scrollbar for sidebar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #111318;
+}
+::-webkit-scrollbar-thumb {
+  background: #282e39;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3b4354;
+}

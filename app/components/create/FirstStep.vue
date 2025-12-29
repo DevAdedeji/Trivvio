@@ -16,15 +16,15 @@
         :key="amount.id"
         class="relative flex flex-col items-center justify-center aspect-[4/5] md:aspect-square rounded-xl p-6 cursor-pointer transition-all duration-300"
         :class="
-          selectedAmountOfQuestions === amount.id
+          selectedAmountOfQuestions === amount.count
             ? 'border-2 border-primary bg-primary/10 shadow-[0_0_30px_-10px_rgba(13,89,242,0.4)]'
             : 'border border-slate-700 bg-slate-800/40 hover:border-primary hover:shadow-[0_0_30px_-10px_rgba(13,89,242,0.3)] hover:-translate-y-1'
         "
         type="button"
-        @click="selectedAmountOfQuestions = amount.id"
+        @click="selectedAmountOfQuestions = amount.count"
       >
         <div
-          v-if="selectedAmountOfQuestions === amount.id"
+          v-if="selectedAmountOfQuestions === amount.count"
           class="absolute top-3 right-3 text-primary"
         >
           <Icon name="material-symbols-light:check-circle" />
@@ -36,7 +36,7 @@
         </div>
         <span
           class="text-5xl font-extrabold tracking-tighter transition-colors group-hover:text-primary"
-          :class="selectedAmountOfQuestions === amount.id ? 'text-primary' : 'text-white'"
+          :class="selectedAmountOfQuestions === amount.count ? 'text-primary' : 'text-white'"
           >{{ amount.count }}</span
         >
         <p class="mt-2 text-sm font-bold text-primary">{{ amount.text }}</p>

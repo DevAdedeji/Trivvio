@@ -9,6 +9,10 @@ export default {
         'background-dark': '#111318',
         'surface-dark': '#1b1f27',
         'border-dark': '#282e39',
+        'accent-red': '#FF3355',
+        'accent-blue': '#45A3E5',
+        'accent-yellow': '#FFC00A',
+        'accent-green': '#66BF39',
       },
       borderRadius: {
         DEFAULT: '0.5rem',
