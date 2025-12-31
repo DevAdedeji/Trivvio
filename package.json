@@ -11,7 +11,12 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "db:push": "supabase db push",
+    "db:pull": "supabase db pull",
+    "db:reset": "supabase db reset",
+    "types:generate": "supabase gen types typescript --linked > types/supabase.ts",
+    "db:migration": "supabase migration new"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,vue}": [
@@ -39,6 +44,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "prettier": "^3.7.4"
+    "prettier": "^3.7.4",
+    "supabase": "^2.70.5"
   }
 }

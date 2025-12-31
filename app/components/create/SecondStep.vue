@@ -21,7 +21,7 @@
           :key="question.id"
           class="group w-full relative border flex flex-col gap-2 p-3 rounded-xl shadow-md cursor-pointer text-left"
           :class="
-            question.id === selectedQuestion.id
+            question.id === selectedQuestion?.id
               ? '!bg-[#282e39] !border-primary/50'
               : 'bg-[#282e39]/50 border-[#3b4354]'
           "
@@ -39,7 +39,7 @@
             </button>
           </div>
           <div class="text-sm font-medium text-white line-clamp-2">
-            {{ question.question }}
+            {{ question.question_text }}
           </div>
           <div class="flex gap-1 mt-2">
             <div
@@ -71,7 +71,10 @@
     >
       <!-- Overlay to darken bg image -->
       <div class="absolute inset-0 bg-[#111318]/95 z-0" />
-      <div class="relative z-10 flex flex-col w-full max-w-[1024px] mx-auto p-8 pb-32 h-full">
+      <div
+        v-if="selectedQuestion"
+        class="relative z-10 flex flex-col w-full max-w-[1024px] mx-auto p-8 pb-32 h-full"
+      >
         <!-- Question Number -->
         <div class="text-center mb-6">
           <h2 class="text-2xl font-bold text-white mb-2">Question</h2>
@@ -80,7 +83,7 @@
         <div class="glass-panel rounded-2xl p-6 mb-6 shadow-xl">
           <div class="flex flex-col gap-4">
             <textarea
-              v-model="selectedQuestion.question"
+              v-model="selectedQuestion.question_text"
               class="w-full bg-transparent border-none text-center text-3xl font-bold text-white placeholder-gray-600 focus:ring-0 resize-none min-h-[80px] leading-tight"
               placeholder="Start typing your question here..."
             />
@@ -100,7 +103,7 @@
                         ? 'bg-primary text-white'
                         : 'text-gray-400 hover:text-white'
                     "
-                    @click="selectedQuestion.time_limit = limit"
+                    @click="selectedQuestion.time_limit = limit as 10 | 20 | 30 | 60"
                   >
                     {{ limit + 's' }}
                   </button>

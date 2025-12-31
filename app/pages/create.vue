@@ -44,10 +44,13 @@
         <!-- Progress Bar -->
         <div v-if="currentStep !== 2" class="flex flex-col gap-3 px-4 py-2">
           <div class="flex gap-6 justify-between items-end">
-            <p class="text-sm font-medium leading-normal text-slate-400">Step 1 of 4</p>
+            <p class="text-sm font-medium leading-normal text-slate-400">Step 1 of 3</p>
           </div>
           <div class="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
-            <div class="h-full bg-primary rounded-full" style="width: 25%" />
+            <div
+              class="h-full bg-primary rounded-full"
+              :style="{ width: `${progressPercentage}%` }"
+            />
           </div>
         </div>
         <FirstStep v-if="currentStep === 1" />
@@ -61,18 +64,21 @@
 import FirstStep from '~/components/create/FirstStep.vue'
 import SecondStep from '~/components/create/SecondStep.vue'
 import { useCreateGame } from '~/composables/game/create'
-const { currentStep, selectedAmountOfQuestions, nextStep, prevStep, questions } = useCreateGame()
+const {
+  currentStep,
+  selectedAmountOfQuestions,
+  nextStep,
+  prevStep,
+  allQuestionsComplete,
+  progressPercentage,
+} = useCreateGame()
 
 const disableNextBtn = computed(() => {
   if (currentStep.value === 1) {
-    if (selectedAmountOfQuestions.value) {
-      return false
-    }
+    return !selectedAmountOfQuestions.value
   }
   if (currentStep.value === 2) {
-    if (questions.value.length === selectedAmountOfQuestions.value) {
-      return false
-    }
+    return !allQuestionsComplete.value
   }
   return true
 })
