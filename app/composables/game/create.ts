@@ -43,7 +43,9 @@ const createEmptyQuestion = (): Question => ({
 
 export const useCreateGame = () => {
   const TOTAL_STEPS = 3
+
   const client = useSupabaseClient<Database>()
+  const user = useSupabaseUser()
 
   const selectedAmountOfQuestions = useState<number | null>('selectedAmountOfQuestions', () => null)
 
@@ -134,6 +136,7 @@ export const useCreateGame = () => {
         .insert({
           question_count: selectedAmountOfQuestions.value,
           status: 'draft',
+          user_id: user.value?.id,
         })
         .select()
         .single()
@@ -147,7 +150,7 @@ export const useCreateGame = () => {
         option_b: q.option_b,
         option_c: q.option_c,
         option_d: q.option_d,
-        correct_answer: q.correct_answer,
+        correct_answer: q.correct_answer ?? '',
         time_limit: q.time_limit,
         order_index: index + 1,
       }))
