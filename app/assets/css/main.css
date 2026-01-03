@@ -74,3 +74,28 @@ button:disabled {
 .header-gradient {
   background: linear-gradient(135deg, rgba(13, 89, 242, 0.1) 0%, rgba(26, 34, 48, 0.5) 100%);
 }
+
+.glass-panel {
+  background: rgba(40, 46, 57, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-bg {
+  background: linear-gradient(-45deg, #101622, #1a2333, #0d1e40, #101622);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}

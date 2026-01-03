@@ -15,7 +15,7 @@
     "db:push": "supabase db push",
     "db:pull": "supabase db pull",
     "db:reset": "supabase db reset",
-    "types:generate": "supabase gen types typescript --linked > app/types/supabse.ts",
+    "types:generate": "supabase gen types typescript --linked > app/types/supabase.ts",
     "db:migration": "supabase migration new"
   },
   "lint-staged": {

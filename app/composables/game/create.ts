@@ -1,5 +1,6 @@
 import type { Question } from '~/types/question'
 import type { Database } from '~/types/supabase'
+import { generateGameCode } from '~/utils'
 
 type QuestionInsert = Database['public']['Tables']['questions']['Insert']
 
@@ -148,6 +149,7 @@ export const useCreateGame = () => {
     isSaving.value = true
 
     try {
+      const gameCode = generateGameCode()
       const { data: game, error: gameError } = await client
         .from('games')
         .insert({
@@ -155,6 +157,7 @@ export const useCreateGame = () => {
           status: 'draft',
           user_id: authUser.id,
           title: gameTitle.value,
+          code: gameCode,
         })
         .select()
         .single()

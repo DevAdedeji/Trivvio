@@ -36,7 +36,7 @@
           :disabled="disableNextBtn || isSaving"
           @click="nextStep"
         >
-          <span class="truncate">{{ currentStep !== 3 ? 'Next' : 'Go to Lobby' }}</span>
+          <span class="truncate">{{ currentStep !== 3 ? 'Next' : 'Start Game' }}</span>
         </button>
       </div>
     </header>

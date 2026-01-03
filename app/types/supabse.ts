@@ -152,6 +152,7 @@ export type Database = {
       }
       games: {
         Row: {
+          code: string
           created_at: string
           id: string
           question_count: number
@@ -161,15 +162,17 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          code: string
           created_at?: string
           id?: string
           question_count: number
           status?: string
           title?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string
         }
         Update: {
+          code?: string
           created_at?: string
           id?: string
           question_count?: number

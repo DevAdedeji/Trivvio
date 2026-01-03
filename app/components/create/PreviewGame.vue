@@ -18,9 +18,7 @@
       <div
         class="bg-[#1a2230] header-gradient rounded-lg overflow-hidden p-8 md:p-10 flex flex-col items-center justify-center text-center relative"
       >
-        <h3
-          class="text-4xl md:text-5xl font-black tracking-tight mb-4 text-slate-900 dark:text-white drop-shadow-sm"
-        >
+        <h3 class="text-4xl md:text-5xl font-black tracking-tight mb-4 text-white drop-shadow-sm">
           {{ gamePreview.title }}
         </h3>
         <div
@@ -49,7 +47,7 @@
           <div class="flex justify-between items-start mb-4">
             <div class="flex gap-4">
               <div
-                class="size-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center font-bold text-sm text-gray-500"
+                class="size-8 rounded-full bg-gray-800 flex items-center justify-center font-bold text-sm text-gray-500"
               >
                 {{ question.order_index }}
               </div>
@@ -158,12 +156,12 @@
           <!-- Footer Meta -->
           <div class="flex items-center gap-4 pl-12">
             <div
-              class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs font-medium text-gray-500"
+              class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-800 text-xs font-medium text-gray-500"
             >
               <Icon name="material-symbols-light:timer" class="text-sm" />{{ question.time_limit }}s
             </div>
             <div
-              class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs font-medium text-gray-500"
+              class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-800 text-xs font-medium text-gray-500"
             >
               <Icon name="material-symbols-light:trophy" class="text-sm" /> 100 pts
             </div>

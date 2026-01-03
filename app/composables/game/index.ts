@@ -4,10 +4,13 @@ export type GameWithQuestions = Database['public']['Tables']['games']['Row'] & {
   questions: Database['public']['Tables']['questions']['Row'][]
 }
 
-export const useGame = () => {
+export const useGame = (gameId: string) => {
   const client = useSupabaseClient<Database>()
 
-  const fetchGameWithQuestions = async (gameId: string) => {
+  const loading = ref(false)
+  const gameDetails = ref<GameWithQuestions | null>(null)
+
+  const fetchGameWithQuestions = async () => {
     const { data, error } = await client
       .from('games')
       .select(
@@ -28,7 +31,17 @@ export const useGame = () => {
     return data as GameWithQuestions
   }
 
+  onMounted(async () => {
+    if (gameId) {
+      loading.value = true
+      const game = await fetchGameWithQuestions()
+      gameDetails.value = game
+      loading.value = false
+    }
+  })
+
   return {
-    fetchGameWithQuestions,
+    loading,
+    gameDetails,
   }
 }
