@@ -53,14 +53,14 @@ button:disabled {
 
 /* Custom scrollbar for sidebar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #111318;
 }
 ::-webkit-scrollbar-thumb {
   background: #282e39;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #3b4354;

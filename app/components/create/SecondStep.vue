@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-1 overflow-hidden relative mt-[70px]">
+  <div class="flex flex-1 overflow-hidden relative">
     <!-- Sidebar: Question List -->
     <aside
-      class="w-64 bg-[#161b22] border-r border-[#282e39] flex flex-col shrink-0 z-10 fixed left-0 h-screen overflow-hidden"
+      class="w-full lg:w-64 bg-[#161b22] border-r border-[#282e39] flex flex-col shrink-0 z-50 fixed top-[70px] lg:left-0 lg:h-screen overflow-hidden"
     >
-      <div class="p-4 border-b border-[#282e39]">
+      <div class="p-4 border-b border-[#282e39] block">
         <button
           class="w-full flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary h-10 rounded-lg font-medium transition-colors"
           type="button"
@@ -14,12 +14,14 @@
           Add Question
         </button>
       </div>
-      <div class="flex-1 overflow-y-auto p-4 space-y-3 pb-24">
+      <div
+        class="flex lg:flex-col flex-row overflow-x-auto overflow-y-hidden lg:overflow-y-auto lg:overflow-x-hidden p-4 gap-3 lg:pb-24 flex-1"
+      >
         <!-- Active Question Item -->
         <button
           v-for="(question, index) in questions"
           :key="question.id"
-          class="group w-full relative border flex flex-col gap-2 p-3 rounded-xl shadow-md cursor-pointer text-left"
+          class="group min-w-[200px] h-[120px] lg:min-w-0 lg:w-full lg:h-auto relative border flex flex-col gap-2 p-3 rounded-xl shadow-md cursor-pointer text-left flex-shrink-0"
           :class="
             question.id === selectedQuestion?.id
               ? '!bg-[#282e39] !border-primary/50'
@@ -38,8 +40,8 @@
               <Icon name="material-symbols-light:delete-outline" class="text-base" />
             </button>
           </div>
-          <div class="text-sm font-medium text-white line-clamp-2">
-            {{ question.question_text }}
+          <div class="text-xs lg:text-sm font-medium text-white line-clamp-2">
+            {{ question.question_text || 'Empty question' }}
           </div>
           <div class="flex gap-1 mt-2">
             <div
@@ -63,7 +65,7 @@
       </div>
     </aside>
     <main
-      class="flex-1 ml-64 flex flex-col h-full relative overflow-y-auto bg-cover bg-center"
+      class="flex-1 lg:ml-64 mt-[300px] lg:mt-0 flex flex-col h-full relative overflow-y-auto bg-cover bg-center"
       data-alt="Subtle dark geometric pattern background"
       style="
         background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAYoDRwddJH4j81rdhquq67HUsPeTxTwPVxI9yqdb2AliKEtFqZgrGmFW1islnYQw3fWgJqoF7XT-PjIg8j3LxjNq9FOgQQFyIx1azkP1Hf1TL6FglGrMNUVJPahHdZFhaq2bs7iGzVBCor3ocK_sHRpGYQ5aUmbCcPjreUonp_mRY2iCW1fn4rjYXb6BmC_u9bLHC0KbShjmp-k-bNXVqRgEpn7F5Rtakr-reyM0RInvPHYqQthQpgoapJWmRzj3hNhHA9GS_w1Cbk');
@@ -77,7 +79,10 @@
       >
         <!-- Question Number -->
         <div class="text-center mb-6">
-          <h2 class="text-2xl font-bold text-white mb-2">Question</h2>
+          <h2 class="text-2xl font-bold text-white mb-2">
+            Question
+            {{ questions.findIndex((question) => question.id === selectedQuestion?.id) + 1 }}
+          </h2>
         </div>
         <!-- Question Input Area -->
         <div class="glass-panel rounded-2xl p-6 mb-6 shadow-xl">
@@ -232,5 +237,23 @@ input,
 textarea {
   outline: none;
   border: none;
+}
+@media (max-width: 1024px) {
+  .overflow-x-auto::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .overflow-x-auto::-webkit-scrollbar-track {
+    background: #111318;
+  }
+
+  .overflow-x-auto::-webkit-scrollbar-thumb {
+    background: #282e39;
+    border-radius: 3px;
+  }
+
+  .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+    background: #3b4354;
+  }
 }
 </style>
