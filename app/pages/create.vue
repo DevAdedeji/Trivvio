@@ -8,6 +8,7 @@
     >
       <div class="flex items-center gap-4">
         <button
+          v-if="currentStep !== 3"
           class="flex items-center justify-center text-slate-400 hover:text-primary transition-colors"
           type="button"
           @click="prevStep"
@@ -24,6 +25,7 @@
       </div>
       <div class="flex items-center gap-6">
         <button
+          v-if="currentStep !== 3"
           class="text-sm font-medium leading-normal text-slate-400 hover:text-white transition-colors"
           href="#"
         >
