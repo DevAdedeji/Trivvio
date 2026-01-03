@@ -30,11 +30,11 @@
           Cancel
         </button>
         <button
-          class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary hover:bg-blue-600 transition-colors text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-lg shadow-blue-900/20"
-          :disabled="disableNextBtn"
+          class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary hover:bg-blue-600 transition-colors text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-lg shadow-blue-900/20 disabled:!opacity-50"
+          :disabled="disableNextBtn || isSaving"
           @click="nextStep"
         >
-          <span class="truncate">Next</span>
+          <span class="truncate">{{ currentStep !== 3 ? 'Next' : 'Go to Lobby' }}</span>
         </button>
       </div>
     </header>
@@ -44,7 +44,9 @@
         <!-- Progress Bar -->
         <div v-if="currentStep !== 2" class="flex flex-col gap-3 px-4 py-2">
           <div class="flex gap-6 justify-between items-end">
-            <p class="text-sm font-medium leading-normal text-slate-400">Step 1 of 3</p>
+            <p class="text-sm font-medium leading-normal text-slate-400">
+              Step {{ currentStep }} of 3
+            </p>
           </div>
           <div class="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
             <div
@@ -57,11 +59,13 @@
       </div>
     </div>
     <SecondStep v-if="currentStep === 2" />
+    <PreviewGame v-if="currentStep === 3 && gameId" />
   </main>
 </template>
 
 <script setup lang="ts">
 import FirstStep from '~/components/create/FirstStep.vue'
+import PreviewGame from '~/components/create/PreviewGame.vue'
 import SecondStep from '~/components/create/SecondStep.vue'
 import { useCreateGame } from '~/composables/game/create'
 const {
@@ -71,6 +75,8 @@ const {
   prevStep,
   allQuestionsComplete,
   progressPercentage,
+  gameId,
+  isSaving,
 } = useCreateGame()
 
 const disableNextBtn = computed(() => {
@@ -80,6 +86,6 @@ const disableNextBtn = computed(() => {
   if (currentStep.value === 2) {
     return !allQuestionsComplete.value
   }
-  return true
+  return false
 })
 </script>

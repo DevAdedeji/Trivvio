@@ -45,7 +45,6 @@ export const useCreateGame = () => {
   const TOTAL_STEPS = 3
 
   const client = useSupabaseClient<Database>()
-  const user = useSupabaseUser()
 
   const selectedAmountOfQuestions = useState<number | null>('selectedAmountOfQuestions', () => null)
 
@@ -99,7 +98,17 @@ export const useCreateGame = () => {
 
   const nextStep = () => {
     if (currentStep.value >= 3) return
-    if (canProceedToNextStep.value) currentStep.value++
+    if (canProceedToNextStep.value) {
+      if (currentStep.value === 2) {
+        createGameWithQuestions()
+        return
+      }
+      if (currentStep.value === 3) {
+        publishGame()
+        return
+      }
+      currentStep.value++
+    }
   }
   const prevStep = () => {
     if (currentStep.value === 1) return
@@ -128,6 +137,12 @@ export const useCreateGame = () => {
   const createGameWithQuestions = async () => {
     if (!selectedAmountOfQuestions.value) return
 
+    const {
+      data: { user: authUser },
+    } = await client.auth.getUser()
+
+    if (!authUser?.id) return
+
     isSaving.value = true
 
     try {
@@ -136,7 +151,8 @@ export const useCreateGame = () => {
         .insert({
           question_count: selectedAmountOfQuestions.value,
           status: 'draft',
-          user_id: user.value?.id,
+          user_id: authUser.id,
+          title: 'In progress',
         })
         .select()
         .single()
@@ -160,11 +176,26 @@ export const useCreateGame = () => {
       if (questionError) throw questionError
 
       gameId.value = game.id
+      currentStep.value = 3
       return game
     } catch (error) {
       console.error('Failed to create game:', error)
     } finally {
       isSaving.value = false
+    }
+  }
+
+  const publishGame = async () => {
+    if (!gameId.value) return
+    try {
+      const { error: gameError } = await client
+        .from('games')
+        .update({ status: 'ready' })
+        .eq('id', gameId.value)
+      if (gameError) throw gameError
+      return navigateTo(`/play/${gameId.value}`)
+    } catch (error) {
+      console.error('Failed to create game:', error)
     }
   }
 
@@ -192,5 +223,8 @@ export const useCreateGame = () => {
     isQuestionComplete,
     allQuestionsComplete,
     progressPercentage,
+    gameId,
+    isSaving,
+    publishGame,
   }
 }

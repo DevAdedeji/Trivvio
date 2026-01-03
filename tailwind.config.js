@@ -13,6 +13,7 @@ export default {
         'accent-blue': '#45A3E5',
         'accent-yellow': '#FFC00A',
         'accent-green': '#66BF39',
+        'card-dark': '#1a2230',
       },
       borderRadius: {
         DEFAULT: '0.5rem',

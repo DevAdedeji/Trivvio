@@ -65,3 +65,12 @@ button:disabled {
 ::-webkit-scrollbar-thumb:hover {
   background: #3b4354;
 }
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.header-gradient {
+  background: linear-gradient(135deg, rgba(13, 89, 242, 0.1) 0%, rgba(26, 34, 48, 0.5) 100%);
+}

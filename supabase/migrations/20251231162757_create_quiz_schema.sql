@@ -56,6 +56,32 @@ create table public.answers (
   answered_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+-- ============================================
+-- PLAYERS TABLE
+-- ============================================
+create table public.players (
+  id uuid primary key default gen_random_uuid(),
+  game_id uuid references public.games(id) on delete cascade not null,
+  player_id text not null,
+  auth_user_id uuid references auth.users(id) on delete set null,
+  display_name text not null,
+  avatar_url text,
+  is_host boolean default false not null,
+  is_ready boolean default false,
+  is_active boolean default true,
+  total_score integer default 0 not null,
+  correct_answers integer default 0 not null,
+  wrong_answers integer default 0 not null,
+  current_streak integer default 0 not null,
+  best_streak integer default 0 not null,
+  joined_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  last_active_at timestamp with time zone default timezone('utc'::text, now()) not null,
+
+  unique(game_id, player_id)
+);
+
+
+
 -- Indexes for better performance
 create index questions_game_id_idx on public.questions(game_id);
 create index questions_game_id_order_idx on public.questions(game_id, order_index);
@@ -66,108 +92,10 @@ create index game_sessions_auth_user_id_idx on public.game_sessions(auth_user_id
 create index answers_game_session_id_idx on public.answers(game_session_id);
 create index answers_question_id_idx on public.answers(question_id);
 create index answers_player_id_idx on public.answers(player_id);
+create index players_game_id_idx on public.players(game_id);
+create index players_player_id_idx on public.players(player_id);
+create index players_game_id_player_id_idx on public.players(game_id, player_id);
 
--- Enable Row Level Security
-alter table public.games enable row level security;
-alter table public.questions enable row level security;
-alter table public.game_sessions enable row level security;
-alter table public.answers enable row level security;
-
--- ============================================
--- RLS Policies for GAMES (Public read, owner write)
--- ============================================
-
-create policy "Anyone can view published games"
-  on public.games for select
-  using (status in ('ready', 'active', 'completed'));
-
-create policy "Users can create their own games"
-  on public.games for insert
-  with check (auth.uid() = user_id);
-
-create policy "Users can update their own games"
-  on public.games for update
-  using (auth.uid() = user_id);
-
-create policy "Users can delete their own games"
-  on public.games for delete
-  using (auth.uid() = user_id);
-
--- ============================================
--- RLS Policies for QUESTIONS (Public read, owner write)
--- ============================================
-
-create policy "Anyone can view questions for published games"
-  on public.questions for select
-  using (
-    exists (
-      select 1 from public.games
-      where games.id = questions.game_id
-      and games.status in ('ready', 'active', 'completed')
-    )
-  );
-
-create policy "Game owners can create questions"
-  on public.questions for insert
-  with check (
-    exists (
-      select 1 from public.games
-      where games.id = questions.game_id
-      and games.user_id = auth.uid()
-    )
-  );
-
-create policy "Game owners can update questions"
-  on public.questions for update
-  using (
-    exists (
-      select 1 from public.games
-      where games.id = questions.game_id
-      and games.user_id = auth.uid()
-    )
-  );
-
-create policy "Game owners can delete questions"
-  on public.questions for delete
-  using (
-    exists (
-      select 1 from public.games
-      where games.id = questions.game_id
-      and games.user_id = auth.uid()
-    )
-  );
-
--- ============================================
--- RLS Policies for GAME SESSIONS
--- ============================================
-
-create policy "Anyone can view game sessions"
-  on public.game_sessions for select
-  using (true);
-
-create policy "Anyone can create game sessions"
-  on public.game_sessions for insert
-  with check (true);
-
-create policy "Anyone can update game sessions"
-  on public.game_sessions for update
-  using (true); -- We'll validate player_id client-side
-
--- ============================================
--- RLS Policies for ANSWERS
--- ============================================
-
-create policy "Anyone can view answers"
-  on public.answers for select
-  using (true);
-
-create policy "Anyone can submit answers"
-  on public.answers for insert
-  with check (true);
-
-create policy "Anyone can update answers"
-  on public.answers for update
-  using (true);
 
 -- ============================================
 -- Triggers
@@ -204,3 +132,9 @@ create trigger update_session_score_on_answer
   after insert on public.answers
   for each row
   execute function public.update_session_score();
+
+  -- Trigger
+create trigger set_player_last_active
+  before update on public.players
+  for each row
+  execute function public.handle_updated_at();
