@@ -1,6 +1,20 @@
 <template>
   <div>
-    <!-- Headline -->
+    <div class="flex justify-center px-4 pt-6 pb-2">
+      <div class="w-full relative group">
+        <div
+          class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors"
+        >
+          <Icon name="material-symbols-light:videogame-asset" />
+        </div>
+        <input
+          v-model="gameTitle"
+          class="form-input flex w-full rounded-lg border border-slate-700 bg-slate-800/50 text-white outline-none placeholder:text-slate-400 focus:border-primary focus:ring-primary h-16 pl-14 pr-4 text-xl font-bold transition-all shadow-sm focus:shadow-[0_0_20px_-5px_rgba(13,89,242,0.2)]"
+          placeholder="Enter game title"
+          type="text"
+        />
+      </div>
+    </div>
     <div class="px-4 py-6 text-center">
       <h1
         class="text-3xl md:text-5xl font-bold leading-tight tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent pb-2"
@@ -47,5 +61,5 @@
 
 <script setup lang="ts">
 import { useCreateGame } from '~/composables/game/create'
-const { amount_of_questions, selectedAmountOfQuestions } = useCreateGame()
+const { amount_of_questions, selectedAmountOfQuestions, gameTitle } = useCreateGame()
 </script>

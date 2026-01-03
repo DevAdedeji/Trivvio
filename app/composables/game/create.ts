@@ -57,6 +57,7 @@ export const useCreateGame = () => {
 
   const currentStep = useState<number>('createGameStep', () => 1)
   const gameId = useState<string | null>('createGameId', () => null)
+  const gameTitle = useState<string>('createGameTitle', () => '')
   const isSaving = useState<boolean>('createGameSaving', () => false)
 
   const maxQuestionsReached = computed(
@@ -88,7 +89,8 @@ export const useCreateGame = () => {
   })
 
   const canProceedToNextStep = computed(() => {
-    if (currentStep.value === 1) return !!selectedAmountOfQuestions.value
+    if (currentStep.value === 1)
+      return !!selectedAmountOfQuestions.value && gameTitle.value.length > 0
     if (currentStep.value === 2)
       return (
         questions.value.length === selectedAmountOfQuestions.value && allQuestionsComplete.value
@@ -152,7 +154,7 @@ export const useCreateGame = () => {
           question_count: selectedAmountOfQuestions.value,
           status: 'draft',
           user_id: authUser.id,
-          title: 'In progress',
+          title: gameTitle.value,
         })
         .select()
         .single()
@@ -211,6 +213,7 @@ export const useCreateGame = () => {
   return {
     amount_of_questions,
     selectedAmountOfQuestions,
+    gameTitle,
     currentStep,
     nextStep,
     prevStep,

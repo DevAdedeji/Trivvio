@@ -79,11 +79,12 @@ const {
   progressPercentage,
   gameId,
   isSaving,
+  gameTitle,
 } = useCreateGame()
 
 const disableNextBtn = computed(() => {
   if (currentStep.value === 1) {
-    return !selectedAmountOfQuestions.value
+    return !selectedAmountOfQuestions.value && !gameTitle.value.length
   }
   if (currentStep.value === 2) {
     return !allQuestionsComplete.value
