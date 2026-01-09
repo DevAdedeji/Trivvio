@@ -71,12 +71,16 @@
         </div>
         <div class="pt-4 flex flex-col gap-3">
           <button
-            class="w-full bg-primary hover:bg-blue-600 text-white font-bold text-lg py-4 px-6 rounded-xl shadow-lg shadow-primary/30 transform transition hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-2"
+            v-if="isHost"
+            class="w-full bg-primary hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-lg py-4 px-6 rounded-xl shadow-lg shadow-primary/30 transform transition hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-2"
+            @click="startLobby"
+            :disabled="loading"
           >
-            <span>Go to Lobby</span>
-            <Icon name="material-symbols-light:arrow-forward" />
+            <span v-if="loading">Starting Lobby...</span>
+            <span v-else>Go to Lobby</span>
+            <Icon v-if="!loading" name="material-symbols-light:arrow-forward" />
           </button>
-          <p class="text-center text-xs text-slate-500 mt-2">
+          <p v-else class="text-center text-xs text-slate-500 mt-2">
             <span class="inline-block size-2 rounded-full bg-green-500 animate-pulse mr-1" />
             Waiting for host to start...
           </p>
@@ -87,11 +91,36 @@
 </template>
 
 <script setup lang="ts">
+import type { Database } from '~/types/supabase'
 import type { GameWithQuestions } from '~/composables/game'
 
+import type { User } from '@supabase/supabase-js'
+
 const props = defineProps<{
-  game: GameWithQuestions
+  game: GameWithQuestions,
+  user: User | null
 }>()
 
+const client = useSupabaseClient<Database>()
+const loading = ref(false)
+
+const isHost = computed(() => {
+  return props.user && props.user.id === props.game.user_id
+})
+
+const startLobby = async () => {
+  loading.value = true
+  const { error } = await client
+    .from('games')
+    .update({ status: 'lobby' })
+    .eq('id', props.game.id)
+
+  if (error) {
+    console.error('Failed to start lobby:', error)
+  }
+  loading.value = false
+}
+
 const gameLink = import.meta.env.VITE_PUBLIC_APP_URL + `/play/${props.game.id}`
+
 </script>
