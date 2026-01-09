@@ -204,70 +204,24 @@ import type { GameWithQuestions } from '~/composables/game'
 
 import type { User } from '@supabase/supabase-js'
 
+import { useGameActions } from '~/composables/useGameActions'
+import { useLobby } from '~/composables/useLobby'
+
 const props = defineProps<{
   game: GameWithQuestions
   user: User | null
 }>()
 
-const client = useSupabaseClient<Database>()
+const { players, fetchPlayers, subscribeToPlayers } = useLobby(props.game.id)
+const { loading, startGame: startGameAction } = useGameActions()
+
 const searchQuery = ref('')
-const players = ref<Database['public']['Tables']['players']['Row'][]>([])
-
-// Fetch initial players
-const fetchPlayers = async () => {
-  const { data, error } = await client
-    .from('players')
-    .select('*')
-    .eq('game_id', props.game.id)
-    .order('joined_at', { ascending: true })
-
-  if (data) {
-    players.value = data
-  }
-}
-
-// Realtime subscription
-const subscribeToPlayers = () => {
-  const channel = client
-    .channel(`game_lobby:${props.game.id}`)
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'players',
-        filter: `game_id=eq.${props.game.id}`,
-      },
-      (payload) => {
-        if (payload.eventType === 'INSERT') {
-          players.value.push(payload.new as Database['public']['Tables']['players']['Row'])
-        } else if (payload.eventType === 'DELETE') {
-          players.value = players.value.filter((p) => p.id !== payload.old.id)
-        } else if (payload.eventType === 'UPDATE') {
-          const index = players.value.findIndex((p) => p.id === payload.new.id)
-          if (index !== -1) {
-            players.value[index] = payload.new as Database['public']['Tables']['players']['Row']
-          }
-        }
-      }
-    )
-    .subscribe()
-
-  return channel
-}
-
-let realtimeChannel: ReturnType<typeof client.channel> | null = null
-
 onMounted(async () => {
   await fetchPlayers()
-  realtimeChannel = subscribeToPlayers()
+  subscribeToPlayers()
 })
 
-onUnmounted(() => {
-  if (realtimeChannel) {
-    client.removeChannel(realtimeChannel)
-  }
-})
+
 
 const filteredPlayers = computed(() => {
   if (!searchQuery.value) return players.value
@@ -276,25 +230,13 @@ const filteredPlayers = computed(() => {
   )
 })
 
-const loading = ref(false)
-
 const isHost = computed(() => {
   return props.user && props.user.id === props.game.user_id
 })
 
 const startGame = async () => {
   if (!isHost.value) return
-  loading.value = true
-
-  const { error } = await client
-    .from('games')
-    .update({ status: 'active' })
-    .eq('id', props.game.id)
-
-  if (error) {
-    console.error('Failed to start game:', error)
-  }
-  loading.value = false
+  await startGameAction(props.game.id)
 }
 
 const copyLink = () => {

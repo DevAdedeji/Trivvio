@@ -93,6 +93,7 @@
 <script setup lang="ts">
 import type { Database } from '~/types/supabase'
 import type { GameWithQuestions } from '~/composables/game'
+import { useGameActions } from '~/composables/useGameActions'
 
 import type { User } from '@supabase/supabase-js'
 
@@ -102,23 +103,14 @@ const props = defineProps<{
 }>()
 
 const client = useSupabaseClient<Database>()
-const loading = ref(false)
+const { loading, startLobby: startLobbyAction } = useGameActions()
 
 const isHost = computed(() => {
   return props.user && props.user.id === props.game.user_id
 })
 
 const startLobby = async () => {
-  loading.value = true
-  const { error } = await client
-    .from('games')
-    .update({ status: 'lobby' })
-    .eq('id', props.game.id)
-
-  if (error) {
-    console.error('Failed to start lobby:', error)
-  }
-  loading.value = false
+  await startLobbyAction(props.game.id)
 }
 
 const gameLink = import.meta.env.VITE_PUBLIC_APP_URL + `/play/${props.game.id}`
