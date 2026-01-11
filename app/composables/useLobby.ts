@@ -47,7 +47,6 @@ export const useLobby = (gameId: string) => {
         }
       )
       .subscribe()
-
     return realtimeChannel
   }
 

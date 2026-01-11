@@ -144,7 +144,11 @@ export const useCreateGame = () => {
       data: { user: authUser },
     } = await client.auth.getUser()
 
-    if (!authUser?.id) return
+    if (!authUser?.id) {
+      const { $toast } = useNuxtApp()
+      $toast.error('You must be logged in to save a game.')
+      return
+    }
 
     isSaving.value = true
 
@@ -182,9 +186,13 @@ export const useCreateGame = () => {
 
       gameId.value = game.id
       currentStep.value = 3
+      const { $toast } = useNuxtApp()
+      $toast.success('Game draft saved successfully!')
       return game
     } catch (error) {
       console.error('Failed to create game:', error)
+      const { $toast } = useNuxtApp()
+      $toast.error('Failed to save game draft.')
     } finally {
       isSaving.value = false
     }
@@ -198,9 +206,13 @@ export const useCreateGame = () => {
         .update({ status: 'ready' })
         .eq('id', gameId.value)
       if (gameError) throw gameError
+      const { $toast } = useNuxtApp()
+      $toast.success('Game published! Redirecting...')
       return navigateTo(`/play/${gameId.value}`)
     } catch (error) {
       console.error('Failed to create game:', error)
+      const { $toast } = useNuxtApp()
+      $toast.error('Failed to publish game.')
     }
   }
 

@@ -11,6 +11,8 @@ export const useAuth = () => {
 
   const logOut = () => {
     client.auth.signOut().then(() => {
+      const { $toast } = useNuxtApp()
+      $toast.success('Logged out successfully')
       navigateTo({ name: 'index', replace: true })
     })
   }

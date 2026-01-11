@@ -240,9 +240,10 @@ const startGame = async () => {
 }
 
 const copyLink = () => {
+  const { $toast } = useNuxtApp()
   const link = `${window.location.origin}/play/${props.game.id}`
   navigator.clipboard.writeText(link)
-  // Could add toast notification here
+  $toast.success('Game link copied to clipboard!')
 }
 </script>
 

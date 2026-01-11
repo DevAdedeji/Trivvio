@@ -39,6 +39,7 @@
               <button
                 class="size-12 rounded-lg bg-[#282e39] hover:text-white hover:bg-primary text-slate-300 flex items-center justify-center transition-all duration-200 active:scale-95"
                 title="Copy Room Code"
+                @click="copyCode"
               >
                 <Icon name="material-symbols-light:content-copy" class="text-2xl" />
               </button>
@@ -63,6 +64,7 @@
             </div>
             <button
               class="px-4 py-2 bg-[#282e39] hover:bg-[#323a47] text-white rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+              @click="copyLink"
             >
               <Icon name="material-symbols-light:content-copy" class="text-lg" />
               Copy Link
@@ -114,5 +116,17 @@ const startLobby = async () => {
 }
 
 const gameLink = import.meta.env.VITE_PUBLIC_APP_URL + `/play/${props.game.id}`
+
+const copyLink = () => {
+  const { $toast } = useNuxtApp()
+  navigator.clipboard.writeText(gameLink)
+  $toast.success('Game link copied to clipboard!')
+}
+
+const copyCode = () => {
+  const { $toast } = useNuxtApp()
+  navigator.clipboard.writeText(props.game.code)
+  $toast.success('Game code copied to clipboard!')
+}
 
 </script>

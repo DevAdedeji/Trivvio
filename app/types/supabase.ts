@@ -44,7 +44,7 @@ export type Database = {
           answered_at: string
           correct_answer: string
           game_id: string
-          game_session_id: string
+          game_session_id: string | null
           id: string
           is_correct: boolean
           player_answer: string
@@ -57,7 +57,7 @@ export type Database = {
           answered_at?: string
           correct_answer: string
           game_id: string
-          game_session_id: string
+          game_session_id?: string | null
           id?: string
           is_correct: boolean
           player_answer: string
@@ -70,7 +70,7 @@ export type Database = {
           answered_at?: string
           correct_answer?: string
           game_id?: string
-          game_session_id?: string
+          game_session_id?: string | null
           id?: string
           is_correct?: boolean
           player_answer?: string
@@ -154,8 +154,11 @@ export type Database = {
         Row: {
           code: string
           created_at: string
+          current_question_index: number
           id: string
+          phase: string
           question_count: number
+          round_ends_at: string | null
           status: string
           title: string | null
           updated_at: string
@@ -164,8 +167,11 @@ export type Database = {
         Insert: {
           code: string
           created_at?: string
+          current_question_index?: number
           id?: string
+          phase?: string
           question_count: number
+          round_ends_at?: string | null
           status?: string
           title?: string | null
           updated_at?: string
@@ -174,8 +180,11 @@ export type Database = {
         Update: {
           code?: string
           created_at?: string
+          current_question_index?: number
           id?: string
+          phase?: string
           question_count?: number
+          round_ends_at?: string | null
           status?: string
           title?: string | null
           updated_at?: string

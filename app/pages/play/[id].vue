@@ -32,8 +32,7 @@ const route = useRoute()
 const client = useSupabaseClient<Database>()
 const gameId = route.params.id as string
 
-// Fetch user immediately (using top-level await or onMounted preferrably, but top-level await is easiest for simple auth check)
-// Using data: { user } destructuring
+
 const { data: { user: authUser } } = await client.auth.getUser()
 
 const { loading, gameDetails } = useGame(gameId)
@@ -83,9 +82,7 @@ onUnmounted(() => {
 
 watch(gameDetails, async (newGame) => {
   if (newGame) {
-  if (newGame) {
     await checkStatus()
-  }
   }
 })
 

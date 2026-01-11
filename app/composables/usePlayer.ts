@@ -29,6 +29,7 @@ export const usePlayer = () => {
   }
 
   const joinAsGuest = async (gameId: string, nickname: string) => {
+    const { $toast } = useNuxtApp()
     let guestId = localStorage.getItem('trivvio_player_id')
     if (!guestId) {
       guestId = crypto.randomUUID()
@@ -48,6 +49,11 @@ export const usePlayer = () => {
 
     if (data) {
       currentPlayer.value = data
+      $toast.success('Joined game successfully!')
+    }
+
+    if (error) {
+       $toast.error('Failed to join game. Please try again.')
     }
 
     return { data, error }
