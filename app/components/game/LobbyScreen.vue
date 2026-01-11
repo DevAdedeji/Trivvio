@@ -10,7 +10,7 @@
           >
             <div class="text-center md:text-left">
               <h2 class="text-xs font-bold uppercase tracking-widest text-blue-400 mb-2">
-                Join at trivia.game
+                Join at trivia
               </h2>
               <div class="font-mono text-6xl md:text-7xl font-black tracking-wider text-white">
                 {{ game.code }}
