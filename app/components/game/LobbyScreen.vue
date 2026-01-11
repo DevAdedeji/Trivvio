@@ -1,8 +1,8 @@
 <template>
   <main class="flex-grow flex flex-col p-4 md:p-8 gap-6 max-w-7xl mx-auto w-full relative z-10">
     <!-- Header Section -->
-    <div class="flex gap-6">
-      <div class="w-[65%] flex flex-col gap-6">
+    <div class="flex flex-col md:flex-row gap-6">
+      <div class="w-full md:w-[65%] flex flex-col gap-6">
         <!-- Game Code Card -->
         <div class="md:col-span-2 relative group">
           <div
@@ -75,7 +75,7 @@
         </div>
       </div>
       <!-- Game Settings Card -->
-      <div class="w-[35%] bg-[#151921] border border-slate-800 rounded-2xl p-6 flex flex-col gap-4">
+      <div class="w-full md:w-[35%] bg-[#151921] border border-slate-800 rounded-2xl p-6 flex flex-col gap-4">
         <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-2 text-blue-400">
             <Icon name="material-symbols-light:info" class="text-xl" />
