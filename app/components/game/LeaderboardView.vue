@@ -83,8 +83,7 @@ const props = defineProps<{
 }>()
 
 defineEmits<{
-  (e: 'next'): void
-  (e: 'finish'): void
+  (e: 'next' | 'finish'): void
 }>()
 
 const topPlayers = computed(() => {

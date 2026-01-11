@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { watch, onMounted, onUnmounted } from 'vue'
 import JoinGameScreen from '~/components/game/JoinGameScreen.vue'
 import GameInfoScreen from '~/components/game/GameInfoScreen.vue'
 import LobbyScreen from '~/components/game/LobbyScreen.vue'

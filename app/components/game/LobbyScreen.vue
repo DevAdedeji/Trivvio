@@ -184,22 +184,22 @@
         </TransitionGroup>
 
         <!-- Empty State slots for visual fullness if few players -->
-        <div
-          v-if="players.length < 6"
-          v-for="i in 6 - players.length"
-          :key="`empty-${i}`"
-          class="bg-[#1b1f27]/30 border border-slate-800/50 border-dashed rounded-2xl p-4 flex flex-col items-center gap-3 opacity-50"
-        >
-          <div class="size-16 rounded-full bg-slate-800/50" />
-          <div class="w-20 h-4 bg-slate-800/50 rounded" />
-        </div>
+         <div v-if="players.length < 6" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div
+            v-for="i in 6 - players.length"
+            :key="`empty-${i}`"
+            class="bg-[#1b1f27]/30 border border-slate-800/50 border-dashed rounded-2xl p-4 flex flex-col items-center gap-3 opacity-50"
+          >
+            <div class="size-16 rounded-full bg-slate-800/50" />
+            <div class="w-20 h-4 bg-slate-800/50 rounded" />
+          </div>
+         </div>
       </div>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import type { Database } from '~/types/supabase'
 import type { GameWithQuestions } from '~/composables/game'
 
 import type { User } from '@supabase/supabase-js'

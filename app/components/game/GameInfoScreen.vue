@@ -104,7 +104,6 @@ const props = defineProps<{
   user: User | null
 }>()
 
-const client = useSupabaseClient<Database>()
 const { loading, startLobby: startLobbyAction } = useGameActions()
 
 const isHost = computed(() => {

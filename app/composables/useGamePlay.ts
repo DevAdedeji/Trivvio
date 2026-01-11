@@ -1,6 +1,5 @@
 import type { Database } from '~/types/supabase'
 import type { GameWithQuestions } from '~/composables/game'
-import type { User } from '@supabase/supabase-js'
 
 export const useGamePlay = (gameId: string) => {
   const client = useSupabaseClient<Database>()
