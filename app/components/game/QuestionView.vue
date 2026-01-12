@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full w-full max-w-4xl mx-auto p-6 md:p-8 gap-8 relative z-10 font-sans">
+  <div class="flex flex-col h-full w-full max-w-4xl mx-auto p-6 md:px-8 md:py-8 md:pb-16 gap-8 relative z-10 font-sans">
     <!-- Header / Timer -->
     <div class="flex items-center justify-between text-slate-400 text-xs font-bold tracking-widest uppercase">
       <div class="flex items-center gap-2">

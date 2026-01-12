@@ -91,20 +91,61 @@ export const useGamePlay = (gameId: string) => {
     const isCorrect = answer === currentQuestion.value.correct_answer
     const points = isCorrect ? 100 + (timeRemaining.value * 10) : 0
 
-    // 1. Call RPC to handle answer insertion and player stats update atomically
-    // @ts-ignore
-    const { data: result, error: rpcError } = await client.rpc('submit_answer', {
-      p_game_id: gameId,
-      p_player_id: playerId,
-      p_question_id: currentQuestion.value.id,
-      p_answer_text: answer,
-      p_correct_answer: currentQuestion.value.correct_answer,
-      p_is_correct: isCorrect,
-      p_points: points
+    // 1. Insert Answer
+    const { error: answerError } = await client.from('answers').insert({
+      game_id: gameId,
+      player_id: playerId,
+      question_id: currentQuestion.value.id,
+      player_answer: answer,
+      correct_answer: currentQuestion.value.correct_answer,
+      is_correct: isCorrect,
+      points_earned: points,
     })
 
-    if (rpcError) {
-      throw rpcError
+    if (answerError) {
+      console.error('[useGamePlay] Answer Insert Error', answerError)
+      throw answerError
+    }
+
+    // 2. Fetch Current Stats
+    const { data: player, error: fetchError } = await client
+      .from('players')
+      .select('total_score, current_streak, best_streak, correct_answers, wrong_answers')
+      .eq('id', playerId)
+      .single()
+
+    if (fetchError || !player) {
+      // Non-blocking error, but good to know
+      console.error('[useGamePlay] Player Fetch Error', fetchError)
+      return points
+    }
+
+    // 3. Calculate New Stats
+    const newScore = (player.total_score || 0) + points
+    const newCorrect = (player.correct_answers || 0) + (isCorrect ? 1 : 0)
+    const newWrong = (player.wrong_answers || 0) + (isCorrect ? 0 : 1)
+
+    let newStreak = isCorrect ? (player.current_streak || 0) + 1 : 0
+    let bestStreak = player.best_streak || 0
+    if (newStreak > bestStreak) {
+        bestStreak = newStreak
+    }
+
+    // 4. Update Player
+    const { error: updateError } = await client
+      .from('players')
+      .update({
+        total_score: newScore,
+        current_streak: newStreak,
+        best_streak: bestStreak,
+        correct_answers: newCorrect,
+        wrong_answers: newWrong,
+        last_active_at: new Date().toISOString()
+      })
+      .eq('id', playerId)
+
+    if (updateError) {
+       console.error('[useGamePlay] Player Update Error', updateError)
     }
 
     return points
