@@ -3,15 +3,18 @@
     <!-- Header / Timer -->
     <div class="flex items-center justify-between text-slate-400 text-xs font-bold tracking-widest uppercase">
       <div class="flex items-center gap-2">
-         <span v-if="totalAnswers !== undefined" class="text-white bg-slate-800 px-2 py-1 rounded">
-            {{ totalAnswers }} / {{ totalPlayers }} Answered
-         </span>
          <span class="relative flex h-2 w-2 ml-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
          </span>
          <span class="text-green-500">LIVE</span>
       </div>
+
+      <!-- Progress -->
+      <span class="text-slate-500">
+        Question {{ questionIndex + 1 }} / {{ totalQuestions }}
+      </span>
+
       <span>{{ timeRemaining }}s</span>
     </div>
 
@@ -56,8 +59,8 @@
         </span>
 
         <!-- Host/Answered View: Answer Count -->
-        <div v-if="isHost || hasAnswered" class="absolute top-2 right-2 md:top-4 md:right-4 bg-black/40 px-3 py-1 rounded-full text-sm font-black text-white backdrop-blur-sm">
-          {{ answerCounts?.[options[key]] || 0 }}
+        <div v-if="isHost" class="absolute top-2 right-2 md:top-4 md:right-4 bg-black/40 px-3 py-1 rounded-full text-sm font-black text-white backdrop-blur-sm">
+          {{ answerCounts?.[getOptionLetter(key)] || 0 }}
         </div>
       </button>
     </div>
@@ -74,6 +77,8 @@ const props = defineProps<{
   answerCounts?: Record<string, number>
   totalAnswers?: number
   totalPlayers?: number
+  questionIndex: number
+  totalQuestions: number
 }>()
 
 const emit = defineEmits<{
@@ -114,6 +119,16 @@ const getOptionIcon = (key: string) => {
     case 'option_d': return 'material-symbols-light:square-rounded' // Square
     default: return 'material-symbols-light:circle'
   }
+}
+
+const getOptionLetter = (key: string) => {
+  const map: Record<string, string> = {
+    'option_a': 'A',
+    'option_b': 'B',
+    'option_c': 'C',
+    'option_d': 'D'
+  }
+  return map[key] || key
 }
 
 </script>

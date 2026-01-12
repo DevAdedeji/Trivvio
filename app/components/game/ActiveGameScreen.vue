@@ -17,6 +17,8 @@
       :answer-counts="answerCounts"
       :total-answers="totalAnswers"
       :total-players="players.length"
+      :question-index="game.current_question_index"
+      :total-questions="game.questions?.length || 0"
       @answer="handleAnswer"
     />
 
@@ -102,6 +104,13 @@ watch(timeRemaining, async (val) => {
     }
 })
 
+// Watch game phase to re-fetch players for leaderboard (Sync fix)
+watch(() => props.game.phase, async (newPhase) => {
+    if (newPhase === 'leaderboard' || newPhase === 'finished') {
+        await fetchPlayers()
+    }
+})
+
 const isLastQuestion = computed(() => {
     if (!props.game.questions) return false
     return props.game.current_question_index >= props.game.questions.length - 1
@@ -111,8 +120,12 @@ const handleAnswer = async (optionKey: string) => {
     const { $toast } = useNuxtApp()
     try {
         const playerId = getPlayerId()
+        console.log('[ActiveGameScreen] handleAnswer', { optionKey, playerId, playersCount: players.value.length })
+
         if (!playerId) {
-             $toast.error('Could not identify player.')
+             const guestId = localStorage.getItem('trivvio_player_id')
+             console.error('[ActiveGameScreen] No player ID found. LocalStorage:', guestId, 'Players:', players.value)
+             $toast.error(`Could not identify player. (GuestID: ${guestId?.slice(0,4)}...)`)
              return
         }
 
@@ -121,18 +134,30 @@ const handleAnswer = async (optionKey: string) => {
         const question = props.game.questions[props.game.current_question_index]
         if (!question) return
 
-        const answerText = question[optionKey as 'option_a' | 'option_b' | 'option_c' | 'option_d']
+        // Map option_a -> A, option_b -> B, etc.
+        const optionMap: Record<string, string> = {
+            'option_a': 'A',
+            'option_b': 'B',
+            'option_c': 'C',
+            'option_d': 'D'
+        }
+        const answerValue = optionMap[optionKey] || optionKey
 
-        const resultPoints = await submitAnswer(playerId, answerText)
+        console.log('[ActiveGameScreen] Submitting answer:', { optionKey, answerValue, correctAnswer: question.correct_answer })
 
-        if (resultPoints && resultPoints > 0) {
-             $toast.success(`Correct! +${resultPoints} pts`)
-        } else {
-             $toast.error('Wrong answer!')
+        const resultPoints = await submitAnswer(playerId, answerValue)
+        console.log('[ActiveGameScreen] Submit result:', resultPoints)
+
+        if (resultPoints !== null) { // resultPoints can be 0 if wrong, so check for null/undefined if error
+             if (resultPoints && resultPoints > 0) {
+                 $toast.success(`Correct! +${resultPoints} pts`)
+             } else {
+                 $toast.error('Wrong answer!')
+             }
         }
 
     } catch (e) {
-        console.error(e)
+        console.error('[ActiveGameScreen] Error submitting answer:', e)
         $toast.error('Failed to submit answer')
     }
 }

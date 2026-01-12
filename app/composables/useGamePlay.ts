@@ -6,7 +6,6 @@ export const useGamePlay = (gameId: string) => {
 
   // Game State
   const game = ref<GameWithQuestions | null>(null)
-
   // Computed
   const currentQuestionIndex = computed(() => game.value?.current_question_index ?? 0)
   const currentPhase = computed(() => game.value?.phase ?? 'lobby')
@@ -92,27 +91,31 @@ export const useGamePlay = (gameId: string) => {
     const isCorrect = answer === currentQuestion.value.correct_answer
     const points = isCorrect ? 100 + (timeRemaining.value * 10) : 0
 
-    const { error } = await client.from('answers').insert({
-      game_id: gameId,
-      player_id: playerId, // This needs the UUID from the players table, NOT the auth user ID or localStorage ID directly.
-      // ACTUALLY: The `answers` table `player_id` FK references `players.id` (UUID).
-      // We need to pass the row ID of the player.
-      question_id: currentQuestion.value.id,
-      player_answer: answer,
-      correct_answer: currentQuestion.value.correct_answer,
-      is_correct: isCorrect,
-      points_earned: points,
-      game_session_id: '00000000-0000-0000-0000-000000000000' // FIXME: We don't have sessions yet, might need to ignore or fix schema.
-      // Migration note: `game_session_id` seems required in schema but we aren't using session logic yet.
-      // Let's check schema. `game_session_id` IS required. We might need to fetch the session or make it nullable.
-      // For now, let's assume `game_session_id` is NOT used in this simple flow or we need to create one.
-      // Let's create a session on join? Or make it nullable.
-      // DECISION: I will make `game_session_id` nullable in a migration fix or just pass a dummy UUID if DB allows.
-      // Checking schema previously: `game_session_id` is NOT NULL? Yes.
-      // I will add a migration to make `game_session_id` nullable as simpler approach.
+    console.log('[useGamePlay] submitAnswer', {
+       playerId,
+       answer,
+       correct: currentQuestion.value.correct_answer,
+       isCorrect,
+       points
     })
 
-    if (error) throw error
+    // 1. Call RPC to handle answer insertion and player stats update atomically
+    // @ts-ignore
+    const { data: result, error: rpcError } = await client.rpc('submit_answer', {
+      p_game_id: gameId,
+      p_player_id: playerId,
+      p_question_id: currentQuestion.value.id,
+      p_answer_text: answer,
+      p_correct_answer: currentQuestion.value.correct_answer,
+      p_is_correct: isCorrect,
+      p_points: points
+    })
+
+    if (rpcError) {
+      console.error('[useGamePlay] RPC Error:', rpcError)
+      throw rpcError
+    }
+
     return points
   }
 
