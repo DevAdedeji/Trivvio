@@ -100,7 +100,7 @@ export const useCreateGame = () => {
   })
 
   const nextStep = () => {
-    if (currentStep.value >= 3) return
+    if (currentStep.value > 3) return
     if (canProceedToNextStep.value) {
       if (currentStep.value === 2) {
         createGameWithQuestions()
@@ -201,6 +201,7 @@ export const useCreateGame = () => {
   const publishGame = async () => {
     if (!gameId.value) return
     try {
+      isSaving.value = true
       const { error: gameError } = await client
         .from('games')
         .update({ status: 'ready' })
@@ -213,6 +214,8 @@ export const useCreateGame = () => {
       console.error('Failed to create game:', error)
       const { $toast } = useNuxtApp()
       $toast.error('Failed to publish game.')
+    } finally {
+      isSaving.value = false
     }
   }
 
