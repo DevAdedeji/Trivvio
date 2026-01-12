@@ -91,14 +91,6 @@ export const useGamePlay = (gameId: string) => {
     const isCorrect = answer === currentQuestion.value.correct_answer
     const points = isCorrect ? 100 + (timeRemaining.value * 10) : 0
 
-    console.log('[useGamePlay] submitAnswer', {
-       playerId,
-       answer,
-       correct: currentQuestion.value.correct_answer,
-       isCorrect,
-       points
-    })
-
     // 1. Call RPC to handle answer insertion and player stats update atomically
     // @ts-ignore
     const { data: result, error: rpcError } = await client.rpc('submit_answer', {
@@ -112,7 +104,6 @@ export const useGamePlay = (gameId: string) => {
     })
 
     if (rpcError) {
-      console.error('[useGamePlay] RPC Error:', rpcError)
       throw rpcError
     }
 

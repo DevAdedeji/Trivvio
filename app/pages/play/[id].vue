@@ -19,7 +19,7 @@
          <ActiveGameScreen :game="gameDetails" :user="authUser" />
       </div>
       <div v-else-if="gameDetails.status === 'finished'">
-         <FinalLeaderboard :players="players" />
+         <FinalLeaderboard :players="players" :game-id="gameDetails.id" />
       </div>
     </div>
   </div>

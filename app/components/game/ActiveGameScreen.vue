@@ -120,11 +120,8 @@ const handleAnswer = async (optionKey: string) => {
     const { $toast } = useNuxtApp()
     try {
         const playerId = getPlayerId()
-        console.log('[ActiveGameScreen] handleAnswer', { optionKey, playerId, playersCount: players.value.length })
-
         if (!playerId) {
              const guestId = localStorage.getItem('trivvio_player_id')
-             console.error('[ActiveGameScreen] No player ID found. LocalStorage:', guestId, 'Players:', players.value)
              $toast.error(`Could not identify player. (GuestID: ${guestId?.slice(0,4)}...)`)
              return
         }
@@ -143,21 +140,14 @@ const handleAnswer = async (optionKey: string) => {
         }
         const answerValue = optionMap[optionKey] || optionKey
 
-        console.log('[ActiveGameScreen] Submitting answer:', { optionKey, answerValue, correctAnswer: question.correct_answer })
-
         const resultPoints = await submitAnswer(playerId, answerValue)
-        console.log('[ActiveGameScreen] Submit result:', resultPoints)
 
-        if (resultPoints !== null) { // resultPoints can be 0 if wrong, so check for null/undefined if error
-             if (resultPoints && resultPoints > 0) {
-                 $toast.success(`Correct! +${resultPoints} pts`)
-             } else {
-                 $toast.error('Wrong answer!')
-             }
+        // Removed immediate feedback toasts per user request
+        if (resultPoints !== null) {
+            // Optional: $toast.success('Answer submitted!')
         }
 
     } catch (e) {
-        console.error('[ActiveGameScreen] Error submitting answer:', e)
         $toast.error('Failed to submit answer')
     }
 }

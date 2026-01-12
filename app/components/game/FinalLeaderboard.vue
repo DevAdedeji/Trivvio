@@ -93,15 +93,29 @@
 <script setup lang="ts">
 import type { Database } from '~/types/supabase'
 import confetti from 'canvas-confetti'
+import { useLobby } from '~/composables/useLobby'
 
 type Player = Database['public']['Tables']['players']['Row']
 
 const props = defineProps<{
   players: Player[]
+  gameId: string
 }>()
 
+// Use internal useLobby to ensure we can re-fetch fresh data
+const { players: freshPlayers, fetchPlayers } = useLobby(props.gameId)
+
+// Initialize freshPlayers with props data to avoid empty flash
+onMounted(async () => {
+    if (props.players.length > 0) {
+        freshPlayers.value = props.players
+    }
+    // Always fetch fresh data to ensure scores are final
+    await fetchPlayers()
+})
+
 const sortedPlayers = computed(() => {
-  return [...props.players].sort((a, b) => b.total_score - a.total_score)
+  return [...freshPlayers.value].sort((a, b) => b.total_score - a.total_score)
 })
 
 const top3 = computed(() => sortedPlayers.value.slice(0, 3))
