@@ -3,8 +3,6 @@
 **Trivvio** is a modern, real-time trivia application built with **Nuxt 4** and **Supabase**. Host live games, join with friends, and compete on the leaderboard with a slick, engaging UI.
 
 ![Trivvio App](/public/screenshot.png)
-*(Note: Add a screenshot of the lobby or game screen here)*
-
 ## ✨ Features
 
 -   **Real-time Gameplay**: Leveraging Supabase Realtime for instant state sync across all clients.
@@ -42,15 +40,21 @@
     npm install
     ```
 
-3.  **Environment Setup**:
-    Create a `.env` file in the root directory and add your Supabase credentials:
-    ```env
-    SUPABASE_URL=your_supabase_project_url
-    SUPABASE_KEY=your_supabase_anon_key
-    ```
-    *Note: The app expects specific database tables (`games`, `questions`, `players`, `answers`). See `supabase/migrations` for schema details.*
+3.  **Supabase Setup**:
+    1.  Create a new project on [Supabase.com](https://supabase.com/).
+    2.  Go to the **SQL Editor** in your Supabase dashboard.
+    3.  Open `supabase/schema.sql` from this repository, copy the entire content, and paste it into the SQL Editor.
+    4.  Run the query to set up all tables, functions, and RLS policies.
+    5.  Go to **Project Settings** -> **API**, and copy your `Project URL` and `anon` public key.
 
-4.  **Run Development Server**:
+4.  **Environment Configuration**:
+    Create a `.env` file in the root directory:
+    ```env
+    SUPABASE_URL=your_unique_project_url (e.g. https://xyz.supabase.co)
+    SUPABASE_KEY=your_anon_public_key
+    ```
+
+5.  **Run Development Server**:
     ```bash
     npm run dev
     ```
