@@ -146,7 +146,7 @@
           <div
             v-for="(player, index) in filteredPlayers"
             :key="player.id"
-            class="group relative bg-[#1b1f27] hover:bg-[#232933] border border-slate-700/50 hover:border-blue-500/50 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all duration-300 h-[200px]"
+            class="group relative bg-[#1b1f27] hover:bg-[#232933] border border-slate-700/50 hover:border-blue-500/50 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all duration-300 h-[150px]"
           >
             <div class="relative">
               <div

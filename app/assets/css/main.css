@@ -23,8 +23,8 @@ body {
 }
 
 button:disabled {
-  opacity: 50 !important;
-  cursor: not-allowed !important;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .glass-panel {
