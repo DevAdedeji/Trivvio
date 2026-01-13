@@ -144,28 +144,99 @@ begin
 end;
 $$;
 
--- RLS Policies (Basic Setup - Enable as needed)
+-- RLS Policies
+-- Enable RLS for all tables
 alter table public.games enable row level security;
 alter table public.questions enable row level security;
 alter table public.players enable row level security;
 alter table public.answers enable row level security;
 
--- Allow everyone to read/write for now to emulate 'service role' like access if anonymous auth is used,
--- OR define stricter policies.
--- Ideally:
--- Games: Read Public, Write Owner
--- Players: Read Public, Write Self (except score, handled by RPC)
--- Questions: Read Public, Write Owner
--- Answers: Read Public, Write (via RPC mostly)
+-- 1. Games Table Policies
+-- Everyone can view games (needed for joining via code)
+create policy "Games are viewable by everyone"
+  on public.games for select
+  using (true);
 
-create policy "Public Read Games" on public.games for select using (true);
-create policy "Public Insert Games" on public.games for insert with check (true);
-create policy "Public Update Games" on public.games for update using (true); -- Should refine
+-- Only authenticated users can create games
+create policy "Users can create games"
+  on public.games for insert
+  with check (auth.role() = 'authenticated');
 
-create policy "Public Read Questions" on public.questions for select using (true);
-create policy "Public Read Players" on public.players for select using (true);
-create policy "Public Insert Players" on public.players for insert with check (true);
-create policy "Public Update Players" on public.players for update using (true); -- RPC bypasses this for score
+-- Only the game owner can update their games
+create policy "Users can update their own games"
+  on public.games for update
+  using (auth.uid() = user_id);
 
-create policy "Public Read Answers" on public.answers for select using (true);
+-- Only the game owner can delete their games
+create policy "Users can delete their own games"
+  on public.games for delete
+  using (auth.uid() = user_id);
 
+
+-- 2. Questions Table Policies
+-- Everyone can view questions (needed for gameplay)
+create policy "Questions are viewable by everyone"
+  on public.questions for select
+  using (true);
+
+-- Only the game owner can insert questions
+create policy "Game owners can insert questions"
+  on public.questions for insert
+  with check (
+    exists (
+      select 1 from public.games
+      where id = game_id
+      and user_id = auth.uid()
+    )
+  );
+
+-- Only the game owner can update questions
+create policy "Game owners can update questions"
+  on public.questions for update
+  using (
+    exists (
+      select 1 from public.games
+      where id = game_id
+      and user_id = auth.uid()
+    )
+  );
+
+-- Only the game owner can delete questions
+create policy "Game owners can delete questions"
+  on public.questions for delete
+  using (
+    exists (
+      select 1 from public.games
+      where id = game_id
+      and user_id = auth.uid()
+    )
+  );
+
+
+-- 3. Players Table Policies (Permissive for Anonymous Play)
+-- Everyone can view players (needed for lobby/leaderboard)
+create policy "Players are viewable by everyone"
+  on public.players for select
+  using (true);
+
+-- Anyone can join a game (Insert player)
+create policy "Anyone can join a game"
+  on public.players for insert
+  with check (true);
+
+-- Anyone can update a player (Score/Streak updates)
+create policy "Anyone can update players"
+  on public.players for update
+  using (true);
+
+
+-- 4. Answers Table Policies (Permissive for Anonymous Play)
+-- Everyone can view answers (maybe needed for stats?)
+create policy "Answers are viewable by everyone"
+  on public.answers for select
+  using (true);
+
+-- Anyone can submit an answer
+create policy "Anyone can submit answers"
+  on public.answers for insert
+  with check (true);
