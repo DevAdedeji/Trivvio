@@ -226,6 +226,7 @@ export const useCreateGame = () => {
     currentStep.value = 1
     gameId.value = null
     isSaving.value = false
+    gameTitle.value = ''
   }
 
   return {

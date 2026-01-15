@@ -26,7 +26,7 @@
       <div class="flex items-center gap-6">
         <button
           v-if="currentStep !== 3"
-          class="text-sm font-medium leading-normal text-slate-400 hover:text-white transition-colors"
+          class="text-sm font-medium leading-normal md:block hidden text-slate-400 hover:text-white transition-colors"
           href="#"
         >
           Cancel
@@ -80,6 +80,7 @@ const {
   gameId,
   isSaving,
   gameTitle,
+  resetCreateGame,
 } = useCreateGame()
 
 const disableNextBtn = computed(() => {
@@ -90,5 +91,9 @@ const disableNextBtn = computed(() => {
     return !allQuestionsComplete.value
   }
   return false
+})
+
+onMounted(() => {
+  resetCreateGame()
 })
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <main class="flex-grow flex items-center justify-center p-6 md:p-12 relative">
+  <main class="flex-grow flex items-center justify-center p-3 sm:p-6 md:p-12 relative">
     <div
       class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] pointer-events-none -z-10"
     />
@@ -33,7 +33,7 @@
               class="relative bg-[#1b1f27] border border-slate-700 rounded-xl p-6 flex items-center justify-between shadow-lg"
             >
               <span
-                class="font-mono text-5xl md:text-6xl font-bold tracking-widest text-white select-all"
+                class="font-mono text-3xl md:text-5xl md:text-6xl font-bold tracking-widest text-white select-all"
                 >{{ game.code }}</span
               >
               <button
