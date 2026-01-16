@@ -140,6 +140,8 @@ export const useCreateGame = () => {
   const createGameWithQuestions = async () => {
     if (!selectedAmountOfQuestions.value) return
 
+    isSaving.value = true
+
     const {
       data: { user: authUser },
     } = await client.auth.getUser()
@@ -149,8 +151,6 @@ export const useCreateGame = () => {
       $toast.error('You must be logged in to save a game.')
       return
     }
-
-    isSaving.value = true
 
     try {
       const gameCode = generateGameCode()
